@@ -1,0 +1,42 @@
+---
+# Setup LAMP Stack
+- hosts: client_1
+  tasks:
+    - name: install nginx
+      become: yes
+      become_user: root
+      apt:
+        pkg:
+          - nginx
+          - postgresql
+        state: present
+        update_cache: yes
+
+    - name: start nginx service
+      become: yes
+      become_user: root
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: start postgresql service
+      become: yes
+      become_user: root
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Create a login user
+      user:
+         name: vini192054
+         password: '$6$QbEM72pebC$j6IoujPWiTQKYf9S5Hy6k.LKLwDXHVYy29qMiik4clzFpk1Wpc6oZqRAAEwp.eCXspDwy.6TXtShWeKlfoxhG0'
+         state: present
+         shell: /bin/bash       # Defaults to /bin/bash
+         system: no             # Defaults to no
+         createhome: no        # Defaults to yes
+         home: /home/vini192054 # Defaults to /home/<username>
+
+    - name: Creation of directory using ansible playbook
+      file: path=/home/192054 state=directory
